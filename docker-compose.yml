@@ -10,7 +10,7 @@ services:
       - .:/app # Mount the current directory to /app in the container
       - /app/node_modules # Ensure node_modules is managed inside the container
     ports:
-      - "3000:3000" # Map port 3000 of the container to port 3000 on the host
+      - "3002:3000" # Map port 3000 of the container to port 3000 on the host
     environment:
       # Set environment variables for the container
       - NODE_ENV=testing
