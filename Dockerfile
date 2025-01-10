@@ -17,13 +17,13 @@ ENV PATH="/root/.bun/bin:$PATH"
 COPY package.json bun.lockb* ./
 
 # Install dependencies using Bun
-RUN bun install --production
+RUN bun install
 
 # Copy the rest of the application code into the container
 COPY . .
 
 # Expose the application port (optional, update based on your app)
-EXPOSE 3000
+EXPOSE 3100
 
 # Specify the default command to run the application
 CMD ["bun", "start"]
