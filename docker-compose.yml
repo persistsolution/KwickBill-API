@@ -5,14 +5,14 @@ services:
     build:
       context: . # Build the Docker image from the current directory
       dockerfile: Dockerfile # Use the specified Dockerfile
-    container_name: kwickbill-api-production # Specify a custom container name
+    container_name: kwickbill-api-development # Specify a custom container name
     volumes:
       - .:/app # Mount the current directory to /app in the container
       - /app/node_modules # Ensure node_modules is managed inside the container
     ports:
-      - "3000:3000" # Map port 3000 of the container to port 3000 on the host
+      - "3001:3000" # Map port 3000 of the container to port 3000 on the host
     environment:
       # Set environment variables for the container
-      - NODE_ENV=prod
+      - NODE_ENV=development
       - PATH=/root/.bun/bin:$PATH # Ensure Bun is in the PATH
     command: ["bun", "start"] # Command to start the application
