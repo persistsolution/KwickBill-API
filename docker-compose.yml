@@ -8,10 +8,10 @@ services:
     container_name: kwickbill-api-testing # Specify a custom container name
     volumes:
       - .:/app # Mount the current directory to /app in the container
-      - /app/node_modules # Ensure node_modules is managed inside the container
     ports:
-      - "3001:3001" # Map port 3000 of the container to port 3000 on the host
+      - "3001:3001" # Map port 3001 of the container to port 3001 on the host
     environment:
       - HOST=0.0.0.0
       - PORT=3001
     command: ["bun", "start"] # Command to start the application
+    working_dir: /app # Ensure the working directory is set to /app
