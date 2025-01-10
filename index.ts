@@ -25,7 +25,7 @@ app.use(cors({
  }));
 
  app.get("/", (req, res) => {
-  res.send("Welcome to the Node.js TypeScript server!");
+  res.send("Welcome to Kwickbill Production");
 });
 
 app.listen(port, () => {
