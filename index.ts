@@ -25,7 +25,7 @@ app.use(cors({
  }));
 
  app.get("/", (req, res) => {
-  res.send("Welcome to Kwickbill Production");
+  res.send("Welcome to Kwickbill Development");
 });
 
 app.listen(port, () => {
