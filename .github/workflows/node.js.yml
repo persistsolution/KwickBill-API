@@ -29,7 +29,7 @@ jobs:
       run: bun install
 
     - name: Build the source code
-      run: bun build --if-present
+      run: bun build index.ts --if-present
 
     - name: Run Tests
       run: bun test
