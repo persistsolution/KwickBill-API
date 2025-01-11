@@ -1,4 +1,4 @@
-name: Node.js CI with Bun
+name: Node.js CI with Bun and PM2
 
 on:
   push:
@@ -24,6 +24,15 @@ jobs:
         echo "PATH=$HOME/.bun/bin:\$PATH" >> $GITHUB_ENV
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
+
+    - name: Install PM2
+      run: npm install -g pm2
+
+    - name: Add npm Global Bin to PATH
+      run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
+
+    - name: Verify PM2 Installation
+      run: pm2 --version
 
     - name: Install dependencies with Bun
       run: bun install
