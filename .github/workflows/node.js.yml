@@ -27,8 +27,7 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
-    - name: Install PM2
-      run: npm install -g pm2
+   
 
     - name: Add npm to PATH
       run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
