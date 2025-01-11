@@ -6,8 +6,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: self-hosted 
+    runs-on: self-hosted
 
     strategy:
       matrix:
@@ -15,7 +14,8 @@ jobs:
         # Specify the exact Node.js version to use
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
@@ -27,15 +27,20 @@ jobs:
       run: |
         curl -fsSL https://bun.sh/install | bash
         echo 'export PATH="\$HOME/.bun/bin:\$PATH"' >> $GITHUB_ENV
+        source $GITHUB_ENV
+        bun --version
 
     - name: Install dependencies with Bun
       run: bun install
 
     - name: Build the source code
-      run: bun run index.ts --if-present
+      run: bun build --if-present
 
-    - name: Run pm2
-      run: pm2 restart index.ts
+    - name: Restart with PM2
+      run: pm2 start index.ts --interpreter bun --name "my-app"
 
-    - name: Run tests
+    - name: Run Tests
       run: bun test
+
+    - name: Check PM2 Logs (Optional for Debugging)
+      run: pm2 logs --lines 20
