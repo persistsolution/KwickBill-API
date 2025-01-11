@@ -27,6 +27,9 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
+    - name: Verify PATH
+      run: echo $PATH
+
     - name: Verify Bun Installation
       run: bun --version
 
