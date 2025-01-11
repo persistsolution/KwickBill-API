@@ -1,4 +1,4 @@
-name: Node.js CI with Bun, PM2, and Docker Trigger
+name: Node.js CI with Bun and PM2 Restart
 
 on:
   push:
@@ -27,17 +27,17 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
+    - name: Install PM2
+      run: npm install -g pm2
+
     - name: Install dependencies with Bun
       run: bun install
 
     - name: Build the source code
-      run: bun build index.ts --if-present
+      run: bun build src/index.ts --if-present
 
     - name: Run Tests
       run: bun test
 
     - name: Restart Application with PM2
-      run: |
-        pm2 restart index.ts 
-
-    
+      run: pm2 restart index.ts
