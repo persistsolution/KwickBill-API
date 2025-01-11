@@ -32,8 +32,6 @@ jobs:
     - name: Add npm Global Bin to PATH
       run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
 
-    - name: Verify PM2 Installation
-      run: pm2 --version
 
     - name: Install dependencies with Bun
       run: bun install
