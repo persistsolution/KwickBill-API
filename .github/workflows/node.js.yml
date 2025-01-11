@@ -33,8 +33,7 @@ jobs:
         npm --version || echo "npm is not accessible"
         node --version || echo "Node.js is not accessible"
 
-    - name: Install PM2
-      run: npm install -g pm2
+    
 
     - name: Install dependencies with Bun
       run: bun install
