@@ -5,7 +5,7 @@ services:
     build:
       context: . # Build the Docker image from the current directory
       dockerfile: Dockerfile # Use the specified Dockerfile
-    container_name: kwickbill-api-testnew # Specify a custom container name
+    container_name: kwickbill-api-testing # Specify a custom container name
     volumes:
       - .:/app # Mount the current directory to /app in the container
       - /app/node_modules # Ensure node_modules is managed inside the container
