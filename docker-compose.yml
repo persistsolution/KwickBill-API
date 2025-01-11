@@ -8,11 +8,10 @@ services:
     container_name: kwickbill-api-staging-new # Specify a custom container name
     volumes:
       - .:/app # Mount the current directory to /app in the container
-      - /app/node_modules # Ensure node_modules is managed inside the container
     ports:
-      - "3003:3003" # Map port 3000 of the container to port 3000 on the host
+      - "3003:3003" # Map port 3001 of the container to port 3001 on the host
     environment:
-      # Set environment variables for the container
-      - NODE_ENV=prod
-      - PATH=/root/.bun/bin:$PATH # Ensure Bun is in the PATH
+      - HOST=0.0.0.0
+      - PORT=3004
     command: ["bun", "start"] # Command to start the application
+    working_dir: /app # Ensure the working directory is set to /app
