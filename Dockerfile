@@ -23,7 +23,7 @@ RUN bun install
 COPY . .
 
 # Expose the application port (optional, update based on your app)
-EXPOSE 3004
+EXPOSE 3007
 
 # Specify the default command to run the application
 CMD ["bun", "start"]
