@@ -12,6 +12,6 @@ services:
       - "3003:3003" # Map port 3001 of the container to port 3001 on the host
     environment:
       - HOST=0.0.0.0
-      - PORT=3004
+      - PORT=3003
     command: ["bun", "start"] # Command to start the application
     working_dir: /app # Ensure the working directory is set to /app
