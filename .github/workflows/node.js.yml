@@ -10,7 +10,6 @@ jobs:
 
     permissions:
       actions: write
-      workflows: write
 
     steps:
     - name: Checkout Repository
@@ -32,7 +31,7 @@ jobs:
       run: bun install
 
     - name: Build the source code
-      run: bun build index.ts --if-present
+      run: bun build src/index.ts --if-present
 
     - name: Run Tests
       run: bun test
@@ -40,7 +39,7 @@ jobs:
     - name: Trigger Docker Workflow
       uses: actions/github-script@v6
       env:
-        GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         script: |
           github.rest.actions.createWorkflowDispatch({
