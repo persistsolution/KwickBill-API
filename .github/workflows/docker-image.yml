@@ -11,6 +11,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    - name: Set Docker Permissions
+      run: |
+        sudo usermod -aG docker $USER
+        newgrp docker
+
     - name: Build the Docker image
       env:
         DOCKER_BUILDKIT: 1
