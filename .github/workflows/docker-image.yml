@@ -13,8 +13,6 @@ jobs:
 
     - name: Set Docker Permissions
       run: |
-        sudo usermod -aG docker $USER
-        newgrp docker
         sudo chmod 666 /var/run/docker.sock
 
     - name: Build the Docker image
@@ -23,4 +21,4 @@ jobs:
       run: |
         docker build . \
           --file Dockerfile \
-          --tag my-image-name:$(date +%s)
+          --tag my-image-name:latest
