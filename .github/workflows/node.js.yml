@@ -27,6 +27,12 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
+    - name: Verify npm Installation
+      run: |
+        which npm || echo "npm not found"
+        npm --version || echo "npm is not accessible"
+        node --version || echo "Node.js is not accessible"
+
     - name: Install PM2
       run: npm install -g pm2
 
