@@ -1,20 +1,19 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: self-hosted
 
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # Step 2: Build the Docker image
     - name: Build the Docker image
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
       run: |
         docker build . \
           --file Dockerfile \
