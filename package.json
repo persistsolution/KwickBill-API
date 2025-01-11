@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "bun run index.ts",
-    "start": "HOST=0.0.0.0 PORT=3001 bun run index.ts",
+    "start": "HOST=0.0.0.0 PORT=3004 bun run index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
