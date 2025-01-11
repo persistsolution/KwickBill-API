@@ -27,20 +27,26 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
-   
-
-    - name: Add npm Global Bin to PATH
-      run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
-
+    - name: Verify Bun Installation
+      run: bun --version
 
     - name: Install dependencies with Bun
       run: bun install
+
+    - name: Add npm Global Bin to PATH
+      run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
 
     - name: Build the source code
       run: bun build index.ts --if-present
 
     - name: Run Tests
       run: bun test
+
+    - name: Install PM2
+      run: npm install -g pm2
+
+    - name: Verify PM2 Installation
+      run: pm2 --version
 
     - name: Restart Application with PM2
       run: pm2 restart index.ts
