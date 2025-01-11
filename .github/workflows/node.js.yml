@@ -1,4 +1,4 @@
-name: Node.js CI with Bun
+name: Node.js CI with Bun and Docker Trigger
 
 on:
   push:
@@ -36,3 +36,14 @@ jobs:
 
     - name: Run Tests
       run: bun test
+      
+    - name: Trigger Docker Workflow
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'docker-image.yml',
+            ref: context.ref,
+          })
