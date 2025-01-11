@@ -36,9 +36,6 @@ jobs:
     - name: Install dependencies with Bun
       run: bun install
 
-    - name: Add npm Global Bin to PATH
-      run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
-
     - name: Build the source code
       run: bun build index.ts --if-present
 
