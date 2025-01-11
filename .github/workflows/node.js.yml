@@ -1,15 +1,19 @@
-name: Node.js CI with Bun and PM2 Restart
+name: Node.js CI with Bun
 
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
     runs-on: self-hosted
 
-    permissions:
-      actions: write
+    strategy:
+      matrix:
+        node-version: [22.12.0]
+        # Specify the Node.js version
 
     steps:
     - name: Checkout Repository
@@ -19,6 +23,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'
 
     - name: Install Bun
       run: |
@@ -27,26 +32,14 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
-    - name: Verify PATH
-      run: echo $PATH
-
-    - name: Verify Bun Installation
-      run: bun --version
-
     - name: Install dependencies with Bun
       run: bun install
 
     - name: Build the source code
-      run: bun build index.ts --if-present
+      run: bun build --if-present
 
     - name: Run Tests
       run: bun test
 
-    - name: Install PM2
-      run: npm install -g pm2
-
-    - name: Verify PM2 Installation
-      run: pm2 --version
-
-    - name: Restart Application with PM2
-      run: pm2 restart index.ts
+    - name: Run Bun Application
+      run: bun index.ts
