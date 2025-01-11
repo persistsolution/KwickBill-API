@@ -1,4 +1,4 @@
-name: Node.js CI with Bun and Docker Trigger
+name: Node.js CI with Bun, PM2, and Docker Trigger
 
 on:
   push:
@@ -31,20 +31,13 @@ jobs:
       run: bun install
 
     - name: Build the source code
-      run: bun build src/index.ts --if-present
+      run: bun build index.ts --if-present
 
     - name: Run Tests
       run: bun test
 
-    - name: Trigger Docker Workflow
-      uses: actions/github-script@v6
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        script: |
-          github.rest.actions.createWorkflowDispatch({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            workflow_id: 'docker-image.yml',
-            ref: context.ref,
-          })
+    - name: Start Application with PM2
+      run: |
+        pm2 start index.ts --interpreter bun --name "node-app"
+
+    
