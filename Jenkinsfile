@@ -6,13 +6,13 @@ pipeline{
     stages{
         stage("Clone Code From Github"){
             steps{
-                git url: "https://github.com/persistsolution/KwickBill-API.git", branch: "main"
+                git url: "https://github.com/persistsolution/KwickBill-API.git", branch: "stage"
             }
         }
         stage("SonarQube Quality Analysis"){
             steps{
                 withSonarQubeEnv("Sonar"){
-                    sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=kwickbillapi -Dsonar.projectKey=kwickbillapi"
+                    sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=kwickbillapi_stage -Dsonar.projectKey=kwickbillapi_stage"
                 }
             }
         }
