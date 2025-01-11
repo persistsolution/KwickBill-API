@@ -13,17 +13,10 @@ jobs:
     strategy:
       matrix:
         node-version: [22.12.0]
-        # Specify the Node.js version
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
 
     - name: Install Bun
       run: |
@@ -40,6 +33,3 @@ jobs:
 
     - name: Run Tests
       run: bun test
-
-    - name: Run Bun Application
-      run: bun index.ts
