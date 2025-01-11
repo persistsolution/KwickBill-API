@@ -7,7 +7,7 @@ const config = {
       host: process.env.DB_HOST || 'database-2.crq6yqcualdr.ap-south-1.rds.amazonaws.com', // Host from environment or default to localhost
       user: process.env.DB_USER || 'postgres', // Database username
       password: process.env.DB_PASSWORD || 'postgres12345', // Database password
-      database: process.env.DB_NAME || 'kwickbill', // Database name
+      database: process.env.DB_NAME || 'kwickbill_dev', // Database name
       port: Number(process.env.DB_PORT) || 5432, // Port number
     },
     migrations: {
