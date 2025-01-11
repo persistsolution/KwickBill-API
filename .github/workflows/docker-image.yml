@@ -15,6 +15,7 @@ jobs:
       run: |
         sudo usermod -aG docker $USER
         newgrp docker
+        sudo chmod 666 /var/run/docker.sock
 
     - name: Build the Docker image
       env:
