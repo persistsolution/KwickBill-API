@@ -1,0 +1,38 @@
+name: Node.js CI with Bun
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted 
+
+    strategy:
+      matrix:
+        node-version: [22.12.0]
+        # Specify the exact Node.js version to use
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install Bun
+      run: |
+        curl -fsSL https://bun.sh/install | bash
+        echo 'export PATH="\$HOME/.bun/bin:\$PATH"' >> $GITHUB_ENV
+
+    - name: Install dependencies with Bun
+      run: bun install
+
+    - name: Build the source code
+      run: bun run index.ts --if-present
+
+    - name: Run tests
+      run: bun test
