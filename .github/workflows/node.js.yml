@@ -82,14 +82,8 @@ jobs:
 
     # Upload OWASP Reports
     - name: Upload OWASP Reports
-      if: always()
-      run: |
-        if [ -d "./owasp-report" ]; then
-          echo "Uploading OWASP reports..."
-        else
-          echo "No OWASP report directory found. Skipping upload."
-        fi
       uses: actions/upload-artifact@v3
+      if: always()
       with:
         name: OWASP Dependency Check Report
         path: ./owasp-report
@@ -132,4 +126,4 @@ jobs:
         fi
         trivy fs --exit-code 0 --severity MEDIUM,HIGH,CRITICAL .
         trivy fs --exit-code 1 --severity CRITICAL .
-      shell: bash 
+      shell: bash
