@@ -26,6 +26,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    # Validate package.json
+    - name: Validate package.json
+      run: |
+        jq . < package.json > /dev/null
+
     # Check and Install Bun
     - name: Ensure Bun is Installed
       run: |
