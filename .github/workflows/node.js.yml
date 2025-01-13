@@ -76,10 +76,10 @@ jobs:
         projectBaseDir: .
         args: >
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
+    - name: Debug Environment Variables
+      run: env
     # Deploy the Docker container
     - name: Deploy Docker Container
       run: |
