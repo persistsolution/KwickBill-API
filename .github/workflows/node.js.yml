@@ -1,4 +1,4 @@
-name: Node.js CI with Bun, PM2, Docker, and OWASP Dependency Check
+name: Node.js CI with OWASP Dependency Check, PM2, and Docker
 
 on:
   push:
@@ -45,16 +45,12 @@ jobs:
 
     # OWASP Dependency Check
     - name: OWASP Dependency Check
-      uses: dependency-check/github-action@v4.4.1
+      uses: OWASP/dependency-check-action@v6.5.3
       with:
-        # Path to the directory or file to scan
         scan: .
-        # Format of the report: HTML, JSON, XML, etc.
         format: "HTML,JSON"
-        # Optional output directory for the reports
-        out: "./owasp-report"
-        # Fail the build on vulnerabilities of a specific severity
-        fail_on_severity: "medium"
+        output-directory: "./owasp-report"
+        fail-on-severity: "medium"
 
     # Build the source code
     - name: Build the Source Code
