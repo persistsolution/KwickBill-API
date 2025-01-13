@@ -1,4 +1,4 @@
-name: Node.js CI with Bun, PM2, and Docker
+name: Node.js CI with Bun, PM2, Docker, and SonarQube
 
 on:
   push:
@@ -64,7 +64,16 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
 
-        
+    # SonarQube Scan
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@v1
+      with:
+        projectBaseDir: .
+        args: >
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
     # Deploy the Docker container
     - name: Deploy Docker Container
@@ -73,4 +82,3 @@ jobs:
         docker stop my-app || true
         docker rm my-app || true
         docker run -d --name my-app -p 3001:3000 ${{ secrets.DOCKER_USERNAME }}/my-app:latest
-
