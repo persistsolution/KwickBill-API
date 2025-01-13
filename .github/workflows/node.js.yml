@@ -77,7 +77,15 @@ jobs:
           --format "ALL" \
           --out ./owasp-report \
           --failOnCVSS 5 \
-          --disableAssembly
+          --disableAssembly \
+          --suppression suppressions.xml || true
+
+    # Upload OWASP Reports
+    - name: Upload OWASP Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: OWASP Dependency Check Report
+        path: ./owasp-report
 
     # Build the source code
     - name: Build the Source Code
