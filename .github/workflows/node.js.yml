@@ -3,7 +3,7 @@ name: Node.js CI with OWASP Dependency Check, PM2, and Docker
 on:
   push:
     branches: [ "main" ]
-  pull_request:
+  pull_request_target:
     branches: [ "main" ]
 
 jobs:
@@ -43,7 +43,20 @@ jobs:
     - name: Install Dependencies
       run: bun install
 
-       # Install OWASP Dependency Check
+    # Install Java
+    - name: Install Java
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-11-jdk
+        java -version
+
+    # Set JAVA_HOME
+    - name: Set JAVA_HOME
+      run: |
+        echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> $GITHUB_ENV
+        echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
+
+    # Install OWASP Dependency Check
     - name: Install OWASP Dependency Check
       run: |
         curl -sSL https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.1/dependency-check-7.4.1-release.zip -o dependency-check.zip
