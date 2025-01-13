@@ -2,13 +2,13 @@ name: Node.js CI with OWASP Dependency Check, PM2, and Docker
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev", "stage", "test" ]
   pull_request_target:
-    branches: [ "main" ]
+    branches: [ "main", "dev", "stage", "test" ]
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/test'
     runs-on: self-hosted
 
     strategy:
