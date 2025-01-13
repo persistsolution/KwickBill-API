@@ -67,7 +67,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+        tags: docker push persistsolution/my-app:tagname
 
     # Deploy the Docker container
     - name: Deploy Docker Container
