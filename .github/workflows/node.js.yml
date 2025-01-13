@@ -88,8 +88,8 @@ jobs:
         projectBaseDir: .
         args: >
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.host.url=http://3.6.93.27:9000 \
+          -Dsonar.token=squ_8366bb7506cdde0779e7739587ca6cff296f8d00
     
     # Deploy the Docker container
     - name: Deploy Docker Container
