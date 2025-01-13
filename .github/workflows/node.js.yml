@@ -75,9 +75,20 @@ jobs:
           --failOnCVSS 5 \
           --disableAssembly \
           --suppression suppressions.xml || true
+        if [ ! -d "./owasp-report" ]; then
+          echo "OWASP report directory not found!"
+          exit 1
+        fi
 
     # Upload OWASP Reports
     - name: Upload OWASP Reports
+      if: always()
+      run: |
+        if [ -d "./owasp-report" ]; then
+          echo "Uploading OWASP reports..."
+        else
+          echo "No OWASP report directory found. Skipping upload."
+        fi
       uses: actions/upload-artifact@v3
       with:
         name: OWASP Dependency Check Report
