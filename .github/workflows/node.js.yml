@@ -12,11 +12,17 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.12.0]
+        node-version: [22.12.0] # Adjust this version if necessary
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
 
     - name: Install Bun
       run: |
@@ -26,16 +32,31 @@ jobs:
         bun --version
 
     - name: Add npm Global Bin to PATH
-      run: echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
+      run: |
+        echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
+        export PATH=$(npm bin -g):$PATH
+
+    - name: Install PM2
+      run: |
+        npm install -g pm2
+        pm2 --version
 
     - name: Install dependencies with Bun
       run: bun install
 
     - name: Build the source code
-      run: bun build index.ts --if-present
+      run: |
+        bun build index.ts --if-present
 
     - name: Run Tests
-      run: bun test
+      run: |
+        bun test
 
-    - name: Restart with PM2
-      run: pm2 restart index.ts
+    - name: Start or Restart Application with PM2
+      run: |
+        pm2 start index.ts --name "my-app" --watch || pm2 restart "my-app"
+        pm2 save
+
+    - name: Verify PM2 Process
+      run: |
+        pm2 list
