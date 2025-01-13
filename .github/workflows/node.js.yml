@@ -132,4 +132,4 @@ jobs:
         fi
         trivy fs --exit-code 0 --severity MEDIUM,HIGH,CRITICAL .
         trivy fs --exit-code 1 --severity CRITICAL .
-      shell: bash
+      shell: bash 
