@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
- "scripts": {
-    "dev": "bun run index.ts",
-    "start": "HOST=0.0.0.0 PORT=3003 bun run index.ts",
-    "build": "tsc",
+  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build": "tsc",
+    "dev": "bun run index.ts",
+    "start": "bun run index.ts",
     "migrate:latest": "ts-node ./node_modules/knex/bin/cli.js migrate:latest --knexfile knexfile.ts",
-    "migrate:rollback": "ts-node ./node_modules/knex/bin/cli.js migrate:rollback --knexfile knexfile.ts",
+    "migrate:rollback": "ts-node ./node_modules/knex/bin/cli.js migrate:rollback --knexfile knexfile.ts"
   },
   "keywords": [],
   "author": "",
