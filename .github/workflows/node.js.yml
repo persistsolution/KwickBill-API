@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    if: github.ref != 'refs/heads/main'
     runs-on: self-hosted
 
     strategy:
@@ -25,49 +26,44 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    # Install Bun
-    - name: Install Bun
+    # Check and Install Bun
+    - name: Ensure Bun is Installed
       run: |
-        curl -fsSL https://bun.sh/install | bash
-        echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        if ! command -v bun &> /dev/null; then
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        fi
         bun --version
 
-    # Install PM2
-    - name: Install PM2 Globally
+    # Check and Install PM2
+    - name: Ensure PM2 is Installed
       run: |
-        npm install -g pm2
-        echo "$(npm bin -g)" >> $GITHUB_PATH
+        if ! command -v pm2 &> /dev/null; then
+          npm install -g pm2
+          echo "$(npm bin -g)" >> $GITHUB_PATH
+        fi
         pm2 --version
 
     # Install dependencies with Bun
     - name: Install Dependencies
       run: bun install
 
-    # Install .NET SDK
-    - name: Install .NET SDK
+    # Check and Install .NET SDK
+    - name: Ensure .NET SDK is Installed
       run: |
-        sudo apt-get update
-        sudo apt-get install -y wget apt-transport-https
-        wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        sudo apt-get update
-        sudo apt-get install -y dotnet-sdk-6.0
+        if ! command -v dotnet &> /dev/null; then
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https
+          wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y dotnet-sdk-6.0
+        fi
         dotnet --version
 
     # Generate Package Lock File
     - name: Generate Package Lock File
       run: npm install --package-lock-only
-
-    # Install Yarn
-    - name: Install Yarn
-      run: npm install -g yarn
-
-    # Install OWASP Dependency Check
-    - name: Install OWASP Dependency Check
-      run: |
-        curl -sSL https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.1/dependency-check-7.4.1-release.zip -o dependency-check.zip
-        unzip dependency-check.zip -d dependency-check
-        chmod +x dependency-check/dependency-check/bin/dependency-check.sh
 
     # Run OWASP Dependency Check
     - name: Run OWASP Dependency Check
