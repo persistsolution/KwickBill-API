@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.12.0] # Adjust this version if necessary
+        node-version: [22.12.0]
 
     steps:
     - name: Checkout Repository
@@ -22,7 +22,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
 
     - name: Install Bun
       run: |
@@ -30,16 +29,6 @@ jobs:
         echo "PATH=$HOME/.bun/bin:\$PATH" >> $GITHUB_ENV
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
-
-    - name: Add npm Global Bin to PATH
-      run: |
-        echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
-        export PATH=$(npm bin -g):$PATH
-
-    - name: Install PM2
-      run: |
-        npm install -g pm2
-        pm2 --version
 
     - name: Install dependencies with Bun
       run: bun install
