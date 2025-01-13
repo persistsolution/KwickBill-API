@@ -3,7 +3,7 @@ name: Node.js CI with OWASP Dependency Check, PM2, and Docker
 on:
   push:
     branches: [ "main" ]
-  pull_request_target:
+  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -43,14 +43,21 @@ jobs:
     - name: Install Dependencies
       run: bun install
 
-    # OWASP Dependency Check
-    - name: OWASP Dependency Check
-      uses: OWASP/dependency-check-action@v6.5.3
-      with:
-        scan: .
-        format: "HTML,JSON"
-        output-directory: "./owasp-report"
-        fail-on-severity: "medium"
+    # Install OWASP Dependency Check
+    - name: Install OWASP Dependency Check
+      run: |
+        curl -sSL https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.1/dependency-check-7.4.1-release.zip -o dependency-check.zip
+        unzip dependency-check.zip -d dependency-check
+        chmod +x dependency-check/bin/dependency-check.sh
+
+    # Run OWASP Dependency Check
+    - name: Run OWASP Dependency Check
+      run: |
+        dependency-check/bin/dependency-check.sh \
+          --scan . \
+          --format "ALL" \
+          --out ./owasp-report \
+          --failOnCVSS 5
 
     # Build the source code
     - name: Build the Source Code
