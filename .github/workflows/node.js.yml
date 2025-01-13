@@ -30,6 +30,13 @@ jobs:
         export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
+    - name: Install PM2 Globally
+      run: |
+        npm install -g pm2
+        echo "PATH=$(npm bin -g):\$PATH" >> $GITHUB_ENV
+        export PATH=$(npm bin -g):$PATH
+        pm2 --version
+
     - name: Install dependencies with Bun
       run: bun install
 
