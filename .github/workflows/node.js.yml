@@ -63,9 +63,8 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
-        
- 
 
+        
 
     # Deploy the Docker container
     - name: Deploy Docker Container
