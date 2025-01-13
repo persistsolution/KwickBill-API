@@ -1,4 +1,4 @@
-name: Node.js CI with Bun, PM2, Docker, and SonarQube
+name: Node.js CI with Bun, PM2, Docker, and OWASP Dependency Check
 
 on:
   push:
@@ -43,6 +43,19 @@ jobs:
     - name: Install Dependencies
       run: bun install
 
+    # OWASP Dependency Check
+    - name: OWASP Dependency Check
+      uses: dependency-check/github-action@v4.4.1
+      with:
+        # Path to the directory or file to scan
+        scan: .
+        # Format of the report: HTML, JSON, XML, etc.
+        format: "HTML,JSON"
+        # Optional output directory for the reports
+        out: "./owasp-report"
+        # Fail the build on vulnerabilities of a specific severity
+        fail_on_severity: "medium"
+
     # Build the source code
     - name: Build the Source Code
       run: |
@@ -64,33 +77,6 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
 
-    # Debug Runner Permissions
-    - name: Check Runner Permissions
-      run: |
-        echo "GitHub Actor: $GITHUB_ACTOR"
-        echo "Repository: $GITHUB_REPOSITORY"
-        echo "Secrets Access: ${{ secrets.SONAR_HOST_URL != '' }}"
-
-    # Debug SonarQube Variables
-    - name: Debug SonarQube Variables
-      run: |
-        echo "SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}"
-        echo "SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}"
-
-    # Debug Environment Variables
-    - name: Debug Environment Variables
-      run: env
-
-    # SonarQube Scan
-    - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@v1
-      with:
-        projectBaseDir: .
-        args: >
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-    
     # Deploy the Docker container
     - name: Deploy Docker Container
       run: |
