@@ -46,7 +46,12 @@ jobs:
 
     # Install dependencies with Bun
     - name: Install Dependencies
-      run: bun install
+      run: |
+        if ! command -v node &> /dev/null; then
+          echo "Node.js is not installed or not found in the PATH."
+          exit 1
+        fi
+        bun install
 
     # Check and Install .NET SDK
     - name: Ensure .NET SDK is Installed
@@ -68,6 +73,9 @@ jobs:
     # Run OWASP Dependency Check
     - name: Run OWASP Dependency Check
       run: |
+        curl -sSL https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.1/dependency-check-7.4.1-release.zip -o dependency-check.zip
+        unzip dependency-check.zip -d dependency-check
+        chmod +x dependency-check/dependency-check/bin/dependency-check.sh
         dependency-check/dependency-check/bin/dependency-check.sh \
           --scan . \
           --format "ALL" \
@@ -75,6 +83,10 @@ jobs:
           --failOnCVSS 5 \
           --disableAssembly \
           --suppression suppressions.xml || true
+        if [ ! -d "./owasp-report" ]; then
+          echo "OWASP report directory not found!"
+          exit 1
+        fi
 
     # Upload OWASP Reports
     - name: Upload OWASP Reports
