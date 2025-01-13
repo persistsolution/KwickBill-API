@@ -48,7 +48,7 @@ jobs:
 
     - name: Start or Restart Application with PM2
       run: |
-        pm2 start index.ts --name "my-app" --watch || pm2 restart "my-app"
+        pm2 restart index.ts --name "my-app" --watch || pm2 restart "my-app"
         pm2 save
 
     - name: Verify PM2 Process
