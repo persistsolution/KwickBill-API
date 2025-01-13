@@ -26,16 +26,13 @@ jobs:
     - name: Install Bun
       run: |
         curl -fsSL https://bun.sh/install | bash
-        echo "PATH=$HOME/.bun/bin:\$PATH" >> $GITHUB_ENV
-        export PATH=$HOME/.bun/bin:$PATH
+        echo "$HOME/.bun/bin" >> $GITHUB_PATH
         bun --version
 
     - name: Install PM2 Globally
       run: |
         npm install -g pm2
-        PM2_PATH=$(npm bin -g)
-        echo "PATH=$PM2_PATH:\$PATH" >> $GITHUB_ENV
-        export PATH=$PM2_PATH:$PATH
+        echo "$(npm bin -g)" >> $GITHUB_PATH
         pm2 --version
 
     - name: Install dependencies with Bun
