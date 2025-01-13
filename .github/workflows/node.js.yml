@@ -2,13 +2,13 @@ name: Node.js CI with OWASP Dependency Check, PM2, Docker, and Trivy
 
 on:
   push:
-    branches: [ "main", "dev", "stage", "test" ]
-  pull_request_target:
-    branches: [ "main", "dev", "stage", "test" ]
+    branches: [ "dev", "test", "stage", "main" ]
+  pull_request:
+    branches: [ "dev", "test", "stage", "main" ]
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/test'
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/test' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/main'
     runs-on: self-hosted
 
     strategy:
@@ -115,9 +115,10 @@ jobs:
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
       run: |
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
-        export PATH=$PATH:$(pwd)/bin
+        if ! command -v trivy &> /dev/null; then
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          export PATH=$PATH:$(pwd)/bin
+        fi
         trivy fs --exit-code 0 --severity MEDIUM,HIGH,CRITICAL .
         trivy fs --exit-code 1 --severity CRITICAL .
       shell: bash
-
