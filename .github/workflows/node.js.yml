@@ -68,7 +68,8 @@ jobs:
       run: |
         echo "SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}"
         echo "SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}"
-    
+    - name: Debug Environment Variables
+      run: env
     # SonarQube Scan
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@v1
@@ -78,8 +79,7 @@ jobs:
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-    - name: Debug Environment Variables
-      run: env
+    
     # Deploy the Docker container
     - name: Deploy Docker Container
       run: |
