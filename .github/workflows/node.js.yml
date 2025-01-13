@@ -4,27 +4,51 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [  "main" ]
+    branches: [ "main" ]
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main'
     runs-on: self-hosted
-
-    strategy:
-      matrix:
-        node-version: [22.12.0]
 
     steps:
     # Checkout the repository
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    # Install OWASP Dependency Check
+    - name: Install OWASP Dependency Check
+      run: |
+        curl -sSL https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.1/dependency-check-7.4.1-release.zip -o dependency-check.zip
+        unzip dependency-check.zip -d dependency-check
+        chmod +x dependency-check/bin/dependency-check.sh
+
+    # Run OWASP Dependency Check
+    - name: Run OWASP Dependency Check
+      run: |
+        dependency-check/bin/dependency-check.sh \
+          --scan . \
+          --format "ALL" \
+          --out ./owasp-report \
+          --failOnCVSS 5 \
+          --disableAssembly \
+          --suppression suppressions.xml || true
+        if [ ! -d "./owasp-report" ]; then
+          echo "OWASP report directory not found!"
+          exit 1
+        fi
+
+    # Upload OWASP Reports
+    - name: Upload OWASP Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: OWASP Dependency Check Report
+        path: ./owasp-report
+
     # Set up Node.js
     - name: Install Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 22.12.0
 
     # Check and Install Bun
     - name: Ensure Bun is Installed
@@ -64,29 +88,6 @@ jobs:
     # Generate Package Lock File
     - name: Generate Package Lock File
       run: npm install --package-lock-only
-
-    # Run OWASP Dependency Check
-    - name: Run OWASP Dependency Check
-      run: |
-        dependency-check/dependency-check/bin/dependency-check.sh \
-          --scan . \
-          --format "ALL" \
-          --out ./owasp-report \
-          --failOnCVSS 5 \
-          --disableAssembly \
-          --suppression suppressions.xml || true
-        if [ ! -d "./owasp-report" ]; then
-          echo "OWASP report directory not found!"
-          exit 1
-        fi
-
-    # Upload OWASP Reports
-    - name: Upload OWASP Reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: OWASP Dependency Check Report
-        path: ./owasp-report
 
     # Build the source code
     - name: Build the Source Code
