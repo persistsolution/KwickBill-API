@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "bun run index.ts",
-    "start": "HOST=0.0.0.0 PORT=3100 bun run index.ts",
+    "start": "HOST=0.0.0.0 PORT=3001 bun run index.ts",
     "migrate:latest": "ts-node ./node_modules/knex/bin/cli.js migrate:latest --knexfile knexfile.ts",
     "migrate:rollback": "ts-node ./node_modules/knex/bin/cli.js migrate:rollback --knexfile knexfile.ts"
   },
