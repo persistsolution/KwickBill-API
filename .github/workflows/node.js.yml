@@ -116,7 +116,12 @@ jobs:
         docker stop my-app || true
         docker rm my-app || true
         docker run -d --name my-app -p 3001:3000 ${{ secrets.DOCKER_USERNAME }}/my-app:latest
-
+        
+    # Restart Application with PM2
+    - name: Restart Application with PM2
+      run: |
+        pm2 restart index.ts || pm2 start index.ts
+        
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
       run: |
