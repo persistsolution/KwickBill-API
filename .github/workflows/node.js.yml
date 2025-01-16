@@ -2,13 +2,13 @@ name: Node.js CI with OWASP Dependency Check, PM2, Docker, and Trivy
 
 on:
   push:
-    branches: [ "main", "dev", "stage", "test" ]
+    branches: [ "main"]
   pull_request_target:
-    branches: [ "main", "dev", "stage", "test" ]
+    branches: [ "main"]
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/stage' || github.ref == 'refs/heads/test'
+    if: github.ref == 'refs/heads/main'
     runs-on: self-hosted
 
     strategy:
@@ -26,15 +26,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    # Check and Install Bun
+    # Ensure Bun is Installed
     - name: Ensure Bun is Installed
       run: |
         if ! command -v bun &> /dev/null; then
           curl -fsSL https://bun.sh/install | bash
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          echo "export PATH=$HOME/.bun/bin:\$PATH" >> $HOME/.bashrc
         fi
+        export PATH=$HOME/.bun/bin:$PATH
         bun --version
-    # Check and Install PM2
+
+    # Ensure PM2 is Installed
     - name: Ensure PM2 is Installed
       run: |
         if ! command -v pm2 &> /dev/null; then
@@ -42,9 +45,14 @@ jobs:
           echo "$(npm bin -g)" >> $GITHUB_PATH
         fi
         pm2 --version
-  
 
-    # Check and Install .NET SDK
+    # Install Dependencies with Bun
+    - name: Install Dependencies
+      run: |
+        export PATH=$HOME/.bun/bin:$PATH
+        bun install
+
+    # Ensure .NET SDK is Installed
     - name: Ensure .NET SDK is Installed
       run: |
         if ! command -v dotnet &> /dev/null; then
@@ -56,6 +64,7 @@ jobs:
           sudo apt-get install -y dotnet-sdk-6.0
         fi
         dotnet --version
+
     # Generate Package Lock File
     - name: Generate Package Lock File
       run: npm install --package-lock-only
@@ -70,6 +79,7 @@ jobs:
           --failOnCVSS 5 \
           --disableAssembly \
           --suppression suppressions.xml || true
+
     # Upload OWASP Reports
     - name: Upload OWASP Reports
       uses: actions/upload-artifact@v3
@@ -77,10 +87,12 @@ jobs:
         name: OWASP Dependency Check Report
         path: ./owasp-report
 
-    # Build the source code
+    # Build the Source Code
     - name: Build the Source Code
       run: |
+        export PATH=$HOME/.bun/bin:$PATH
         bun build index.ts --if-present
+
     # Log in to Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -104,6 +116,7 @@ jobs:
         docker stop my-app || true
         docker rm my-app || true
         docker run -d --name my-app -p 3001:3000 ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
       run: |
