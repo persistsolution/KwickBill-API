@@ -107,15 +107,15 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/kwickbill-prod:latest
 
     # Deploy the Docker container
     - name: Deploy Docker Container
       run: |
-        docker pull ${{ secrets.DOCKER_USERNAME }}/my-app:latest
-        docker stop my-app || true
-        docker rm my-app || true
-        docker run -d --name my-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+        docker pull ${{ secrets.DOCKER_USERNAME }}/kwickbill-prod:latest
+        docker stop kwickbill-prod || true
+        docker rm kwickbill-prod || true
+        docker run -d --name kwickbill-prod -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/kwickbill-prod:latest
         
     # Restart Application with PM2
     - name: Restart Application with PM2
