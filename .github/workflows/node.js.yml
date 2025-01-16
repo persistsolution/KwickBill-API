@@ -120,7 +120,7 @@ jobs:
     # Restart Application with PM2
     - name: Restart Application with PM2
       run: |
-        pm2 restart index.ts || PORT=3000 HOST=0.0.0.0 pm2 start index.ts --name kwickbill-prod --env PORT=3000
+        pm2 restart index.ts || PORT=3001 HOST=0.0.0.0 pm2 start index.ts --name kwickbill-prod --interpreter bun --env PORT=3001
         
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
