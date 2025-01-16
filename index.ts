@@ -9,7 +9,7 @@ import employeeRoute from './src/routers/billsoftadmin/employee/employee-route';
 import productRoute from './src/routers/billsoftadmin/selling-product/product-route';
 import franchiseRoute from './src/routers/billsoftadmin/franchise/franchise-route';
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3100;
 const HOST = process.env.HOST || '0.0.0.0';
 
 app.use(cors());
