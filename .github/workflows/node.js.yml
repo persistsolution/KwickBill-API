@@ -121,7 +121,10 @@ jobs:
     - name: Restart Application with PM2
       run: |
         pm2 restart index.ts --update-env || pm2 start index.ts --name kwickbill-dev --interpreter bun --env PORT=3100 --update-env
+        pm2 restart kwickbill-prod --update-env
+        pm2 restart kwickbill-dev --update-env
         pm2 save
+        pm2 list
         
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
