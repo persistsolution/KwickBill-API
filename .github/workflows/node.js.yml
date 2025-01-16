@@ -2,9 +2,9 @@ name: Node.js CI with OWASP Dependency Check, PM2, Docker, and Trivy
 
 on:
   push:
-    branches: [ "stage" ]
-  pull_request:
-    branches: [ "stage" ]
+    branches: [ "stage"]
+  pull_request_target:
+    branches: [ "stage"]
 
 jobs:
   build:
@@ -26,16 +26,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    # Check and Install Bun
+    # Ensure Bun is Installed
     - name: Ensure Bun is Installed
       run: |
         if ! command -v bun &> /dev/null; then
           curl -fsSL https://bun.sh/install | bash
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          echo "export PATH=$HOME/.bun/bin:\$PATH" >> $HOME/.bashrc
         fi
+        export PATH=$HOME/.bun/bin:$PATH
         bun --version
 
-    # Check and Install PM2
+    # Ensure PM2 is Installed
     - name: Ensure PM2 is Installed
       run: |
         if ! command -v pm2 &> /dev/null; then
@@ -44,11 +46,13 @@ jobs:
         fi
         pm2 --version
 
-    # Install dependencies with Bun
+    # Install Dependencies with Bun
     - name: Install Dependencies
-      run: bun install
+      run: |
+        export PATH=$HOME/.bun/bin:$PATH
+        bun install
 
-    # Check and Install .NET SDK
+    # Ensure .NET SDK is Installed
     - name: Ensure .NET SDK is Installed
       run: |
         if ! command -v dotnet &> /dev/null; then
@@ -83,9 +87,10 @@ jobs:
         name: OWASP Dependency Check Report
         path: ./owasp-report
 
-    # Build the source code
+    # Build the Source Code
     - name: Build the Source Code
       run: |
+        export PATH=$HOME/.bun/bin:$PATH
         bun build index.ts --if-present
 
     # Log in to Docker Hub
@@ -115,10 +120,8 @@ jobs:
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
       run: |
-        if ! command -v trivy &> /dev/null; then
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
-          export PATH=$PATH:$(pwd)/bin
-        fi
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+        export PATH=$PATH:$(pwd)/bin
         trivy fs --exit-code 0 --severity MEDIUM,HIGH,CRITICAL .
         trivy fs --exit-code 1 --severity CRITICAL .
       shell: bash
