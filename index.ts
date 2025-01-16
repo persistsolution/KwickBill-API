@@ -10,7 +10,7 @@ import productRoute from './src/routers/billsoftadmin/selling-product/product-ro
 import franchiseRoute from './src/routers/billsoftadmin/franchise/franchise-route';
 const app = express();
 const port = process.env.PORT || 3001;
-const HOST = process.env.HOST || '0.0.0.0';
+
 
 app.use(cors());
 app.use(bodyParser.json());
