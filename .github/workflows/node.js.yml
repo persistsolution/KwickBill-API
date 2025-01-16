@@ -117,6 +117,11 @@ jobs:
         docker rm kwickbill-dev || true
         docker run -d --name kwickbill-dev -p 3100:3000 ${{ secrets.DOCKER_USERNAME }}/kwickbill-dev:latest
 
+    # Restart Application with PM2
+    - name: Restart Application with PM2
+      run: |
+        pm2 restart index.ts || pm2 start index.ts
+        
     # Run Trivy File System Scan
     - name: Run Trivy File System Scan
       run: |
