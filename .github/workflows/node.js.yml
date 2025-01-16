@@ -42,9 +42,7 @@ jobs:
           echo "$(npm bin -g)" >> $GITHUB_PATH
         fi
         pm2 --version
-    # Install dependencies with Bun
-    - name: Install Dependencies
-      run: bun install
+  
 
     # Check and Install .NET SDK
     - name: Ensure .NET SDK is Installed
